@@ -2,29 +2,8 @@ import json
 from django.http import JsonResponse
 from .models import Attendee
 from events.models import Conference
-from common.json import ModelEncoder
+from .encoders import AttendeeListEncoder, AttendeeDetailEncoder
 from django.views.decorators.http import require_http_methods
-
-
-class AttendeeListEncoder(ModelEncoder):
-    model = Attendee
-    properties = [
-        "name",
-    ]
-
-
-class AttendeeDetailEncoder(ModelEncoder):
-    model = Attendee
-    properties = [
-        "email",
-        "name",
-        "company_name",
-        "created",
-        "conference",
-    ]
-
-    def get_extra_data(self, o):
-        return {"conference": o.conference.name}
 
 
 @require_http_methods(["GET", "POST"])
