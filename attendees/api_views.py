@@ -26,6 +26,7 @@ def api_show_attendee(request, id):
             "created": attendee.created,
             "conference": {
                 "name": attendee.conference.name,
-                "href": attendee.conference.get_api_url(),            }
+                "href": attendee.conference.get_api_url(),
+            }
         }
     )
