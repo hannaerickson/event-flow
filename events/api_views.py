@@ -1,13 +1,14 @@
 import json
 from django.http import JsonResponse
 from .models import Conference, Location, State
+from django.views.decorators.http import require_http_methods
+from .acls import get_photo, get_weather_data
 from .encoders import (
     LocationListEncoder,
     LocationDetailEncoder,
     ConferenceListEncoder,
     ConferenceDetailEncoder
 )
-from django.views.decorators.http import require_http_methods
 
 
 @require_http_methods(["GET", "POST"])
@@ -41,8 +42,12 @@ def api_show_conference(request, id):
     if request.method == "GET":
         try:
             conference = Conference.objects.get(id=id)
+            weather = get_weather_data(
+                conference.location.city,
+                conference.location.state.abbreviation,
+            )
             return JsonResponse(
-                conference,
+                {"conference": conference, "weather": weather},
                 encoder=ConferenceDetailEncoder,
                 safe=False,
             )
@@ -92,6 +97,8 @@ def api_list_locations(request):
                 {"message": "Invalid State abbreviation"},
                 status=400,
             )
+        photo = get_photo(content["city"], content["state"].abbreviation)
+        content.update(photo)
         location = Location.objects.create(**content)
         return JsonResponse(
             location,
