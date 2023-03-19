@@ -1,5 +1,5 @@
 from common.json import ModelEncoder
-from .models import Attendee
+from .models import Attendee, ConferenceVO
 
 
 class AttendeeListEncoder(ModelEncoder):
@@ -21,3 +21,11 @@ class AttendeeDetailEncoder(ModelEncoder):
 
     def get_extra_data(self, o):
         return {"conference": o.conference.name}
+
+
+class ConferenceVODetailEncoder(ModelEncoder):
+    model = ConferenceVO
+    properties = [
+        "name",
+        "import_href",
+    ]
