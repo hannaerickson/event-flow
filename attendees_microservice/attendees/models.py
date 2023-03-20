@@ -7,6 +7,7 @@ class ConferenceVO(models.Model):
     import_href = models.CharField(max_length=200, unique=True)
     name = models.CharField(max_length=200)
 
+
 class Attendee(models.Model):
     email = models.EmailField()
     name = models.CharField(max_length=200)
@@ -40,3 +41,11 @@ class Badge(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
+
+
+class AccountVO(models.Model):
+    email = models.EmailField()
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    is_active = models.BooleanField(default=True)
+    updated = models.DateTimeField(auto_now=True)
