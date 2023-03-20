@@ -1,6 +1,9 @@
 import json
 import requests
-from .keys import PEXELS_API_KEY, OPEN_WEATHER_API_KEY
+import os
+
+PEXELS_API_KEY = os.environ["PEXELS_API_KEY"]
+OPEN_WEATHER_API_KEY = os.environ["OPEN_WEATHER_API_KEY"]
 
 
 # <----- from solution ----->

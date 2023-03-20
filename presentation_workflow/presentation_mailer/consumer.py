@@ -1,58 +1,63 @@
 import json
 import pika
+from pika.exceptions import AMQPConnectionError
 import django
 import os
 import sys
-from django.core.mail import send_mail
-from pika.exceptions import AMQPConnectionError
 import time
+from django.core.mail import send_mail
+
 
 sys.path.append("")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "presentation_mailer.settings")
 django.setup()
 
-
 while True:
     try:
-
-        def process_approval(ch, method, properties, body):
-            print("  Received %r" % body)
-            content = json.loads(body)
-            send_mail(
-                "Your presentation has been accepted",
-                f"{content['presenter_name']}, we're happy to tell you that your presentation {content['title']} has been accepted",
-                "admin@conference.go",
-                [f"{content['presenter_email']}"],
-                fail_silently=False,
-            )
-
-        def process_rejection(ch, method, properties, body):
-            print("  Received %r" % body)
-            content = json.loads(body)
-            send_mail(
-                "Your presentation has been rejected",
-                f"{content['presenter_name']}, we regret to inform you that your presentation {content['title']} has been rejected",
-                "admin@conference.go",
-                [f"{content['presenter_email']}"],
-                fail_silently=False,
-            )
-
-        parameters = pika.ConnectionParameters(host="rabbitmq")
-        connection = pika.BlockingConnection(parameters)
+        connection = pika.BlockingConnection(
+            pika.ConnectionParameters("rabbitmq")
+        )
         channel = connection.channel()
         channel.queue_declare(queue="presentation_approvals")
+        channel.queue_declare(queue="presentation_rejections")
+
+        def reject(ch, method, properties, body):
+            data = json.loads(body)
+            email = data["presenter_email"]
+            name = data["presenter_name"]
+            title = data["title"]
+            send_mail(
+                "Your presentation has been rejected",
+                f"We're sorry, {name}, but your presentation {title} has been rejected",
+                "admin@conferece.go",
+                [email],
+                fail_silently=False,
+            )
+
+        def approve(ch, method, properties, body):
+            data = json.loads(body)
+            email = data["presenter_email"]
+            name = data["presenter_name"]
+            title = data["title"]
+            send_mail(
+                "Your presentation has been accepted",
+                f"{name}, we're happy to tell you that your presentation {title} has been accepted",
+                "admin@conferece.go",
+                [email],
+                fail_silently=False,
+            )
+
         channel.basic_consume(
             queue="presentation_approvals",
-            on_message_callback=process_approval,
+            on_message_callback=approve,
             auto_ack=True,
         )
-        channel.queue_declare(queue="presentation_rejections")
         channel.basic_consume(
             queue="presentation_rejections",
-            on_message_callback=process_rejection,
+            on_message_callback=reject,
             auto_ack=True,
         )
         channel.start_consuming()
     except AMQPConnectionError:
         print("Could not connect to RabbitMQ")
-        time.sleep(1)
+        time.sleep(2.0)

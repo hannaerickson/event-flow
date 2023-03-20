@@ -1,10 +1,8 @@
 FROM python:3
-RUN apt-get update
-RUN apt-get install cron -y
 ENV PYTHONUNBUFFERED 1
 WORKDIR /app
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
+RUN chmod +x /wait
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-RUN touch /var/spool/cron/crontabs/root
-RUN crontab -l
-CMD python manage.py crontab add && service cron start && python manage.py runserver "0.0.0.0:8001"
+CMD /wait && python manage.py migrate && python manage.py runserver "0.0.0.0:8001"
