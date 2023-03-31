@@ -11,7 +11,7 @@ def get_photo(city, state):
     headers = {"Authorization": PEXELS_API_KEY}
     params = {
         "per_page": 1,
-        "query": city + " " + state,
+        "query": f"downtown {city} {state}",
     }
     url = "https://api.pexels.com/v1/search"
     response = requests.get(url, params=params, headers=headers)

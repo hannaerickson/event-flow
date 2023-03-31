@@ -98,7 +98,7 @@ def api_reject_presentation(request, id):
     parameters = pika.ConnectionParameters(host="rabbitmq")
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
-    channel.queue_declare(queue="preesntation_rejections")
+    channel.queue_declare(queue="presntation_rejections")
     channel.basic_publish(
         exchange="",
         routing_key="presentation_rejections",
