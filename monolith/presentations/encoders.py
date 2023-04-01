@@ -8,6 +8,7 @@ class PresentationListEncoder(ModelEncoder):
     properties = [
         "title",
         "status",
+        "id",
     ]
 
     def get_extra_data(self, o):
@@ -24,6 +25,7 @@ class PresentationDetailEncoder(ModelEncoder):
         "synopsis",
         "created",
         "conference",
+        "id",
     ]
     encoders = {
         "conference": ConferenceListEncoder(),
