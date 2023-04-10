@@ -11,6 +11,7 @@
       crossorigin="anonymous"
     />
     <title>Conference GO!</title>
+    <script type="module" src="js/checkStatus.js"></script>
     <script type="module" src="./js/app.js"></script>
     </style>
   </head>
@@ -36,13 +37,16 @@
                 <a class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="new-location.html">New Location</a>
+                <a class="nav-link" aria-current="page" href="login.html">Login</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="new-conference.html">New Conference</a>
+                <a class="nav-link d-none" aria-current="page" id="hidden-location" href="new-location.html">New Location</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="new-presentation.html">New Presentation</a>
+                <a class="nav-link d-none" aria-current="page" id="hidden-conference" href="new-conference.html">New Conference</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link d-none" aria-current="page" id="hidden-presentation" href="new-presentation.html">New Presentation</a>
               </li>
             </ul>
             <form class="d-flex">
@@ -52,9 +56,10 @@
                 placeholder="Search conferences"
                 aria-label="Search"
               />
-              <button class="btn btn-outline-success" type="submit">
+              <button class="btn btn-outline-success me-2" type="submit">
                 Search
               </button>
+              <a class="btn btn-primary" href="attend-conference.html">Attend!</a>
             </form>
           </div>
         </div>
@@ -74,11 +79,15 @@
             The only resource you'll ever need to plan an run your in-person or
             virtual conference for thousands of attendees and presenters.
           </p>
+          <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="attend-conference.html" type="button" class="btn btn-primary btn-lg px-4 gap-3">Attend a conference!</a>
+          </div>
         </div>
       </div>
       <div class="container">
         <h2>Upcoming conferences</h2>
         <div class="row row-cols-1 row-cols-md-3 g-4">
+
           <!-- <div class="col"></div>
           <div class="col"></div>
           <div class="col"></div> -->

@@ -17,7 +17,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       }
     }
   } catch (e) {
-    console.error("There has been an error");
+    console.error("Could not load states.");
   }
 
   const formTag = document.getElementById('create-location-form');

@@ -14,7 +14,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             }
         }
     } catch (e) {
-        console.error("Oops! Something went wrong.")
+        console.error("Could not load locations.")
     }
 
     const formTag = document.getElementById('create-conference-form');
